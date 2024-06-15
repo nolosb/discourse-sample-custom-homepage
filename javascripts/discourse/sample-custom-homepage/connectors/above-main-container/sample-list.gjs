@@ -9,13 +9,25 @@ export default class SampleList extends Component {
 
   @tracked featuredTagTopics = [];
 
+  constructor() {
+    super(...arguments);
+    this.helloStore();
+    this.getTopics();
+  }
+
+  @action
+  async helloStore() {
+    await this.store.findFiltered("topicList", {
+      filter: "latest",
+    });
+  }
+
   @action
   async getTopics() {
-
     const topicList = await this.store.findFiltered("topicList", {
       filter: "latest",
       params: {
-        tags: ['featured'],
+        tags: ["featured"],
       },
     });
 
@@ -26,17 +38,17 @@ export default class SampleList extends Component {
   <template>
     <div class="sample-list" {{didInsert this.getTopics}}>
       <h3>Sample List</h3>
-          <div class="featured-topics">
-            {{#each this.featuredTagTopics as |t|}}
-              <div class="featured-topic">
-                <h3>
-                    {{t.fancy_title}}
-                </h3>
+      <div class="featured-topics">
+        {{#each this.featuredTagTopics as |t|}}
+          <div class="featured-topic">
+            <h3>
+              {{t.fancy_title}}
+            </h3>
 
-                {{t.tags}}
-              </div>
-            {{/each}}
+            {{t.tags}}
           </div>
+        {{/each}}
+      </div>
     </div>
   </template>
 }
